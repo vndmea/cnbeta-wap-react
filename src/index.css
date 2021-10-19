@@ -161,3 +161,10 @@ body,
 li {
   list-style: none;
 }
+
+ul {
+  padding-inline-start: 5px;
+  margin-block-start: 5px;
+  margin-block-end: 5px;
+  list-style: none;
+}
