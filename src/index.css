@@ -168,3 +168,7 @@ ul {
   margin-block-end: 5px;
   list-style: none;
 }
+
+a {
+  text-decoration: none;
+}
