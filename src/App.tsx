@@ -11,12 +11,14 @@ function App() {
   const [list, setList] = useState<Article[]>([]);
 
   const fetchData = async () => {
+    setLoading(true);
     const result = await fetch(API_URL).then((res) => res.json());
     const data: Article[] = result.data;
     const arr = data.filter((item, index) => {
       return data.findIndex((i) => i.aid === item.aid) === index;
     });
     setList(arr);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -34,13 +36,14 @@ function App() {
               <i className="ant-spin-dot-item"></i>
               <i className="ant-spin-dot-item"></i>
             </span>
+            <div>拼命加载中...</div>
           </div>
         </div>
       ) : (
         ""
       )}
 
-      {list.length ? (
+      {
         <ul>
           {list.map((item) => {
             return (
@@ -50,9 +53,7 @@ function App() {
             );
           })}
         </ul>
-      ) : (
-        "暂无数据"
-      )}
+      }
     </div>
   );
 }
