@@ -45,7 +45,7 @@ function App() {
           {list.map((item) => {
             return (
               <li key={item.aid}>
-                <a href={`/wap/view/${item.aid}.htm`}>{item.text}</a>
+                <a href={`${API_URL}wap/view/${item.aid}.htm`}>{item.text}</a>
               </li>
             );
           })}
