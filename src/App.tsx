@@ -28,7 +28,7 @@ const useArticle = (page: number): [boolean, boolean, Article[]] => {
         setArticles(uniqArticles);
         setLoading(false);
         setInit(false);
-        setUrl(url + page);
+        setUrl(url + "?page=" + page);
       });
   }, [page]);
 
