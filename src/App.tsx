@@ -1,29 +1,43 @@
 import { useState, useEffect } from "react";
 import { API_URL } from "./constants";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 interface Article {
   aid: string;
   text: string;
 }
 
-function App() {
+const useArticle = (page: number): [boolean, boolean, Article[]] => {
+  const [init, setInit] = useState(true);
+  const [url, setUrl] = useState(API_URL);
   const [loading, setLoading] = useState(false);
-  const [list, setList] = useState<Article[]>([]);
-
-  const fetchData = async () => {
-    setLoading(true);
-    const result = await fetch(API_URL).then((res) => res.json());
-    const data: Article[] = result.data;
-    const arr = data.filter((item, index) => {
-      return data.findIndex((i) => i.aid === item.aid) === index;
-    });
-    setList(arr);
-    setLoading(false);
-  };
+  const [articles, setArticles] = useState<Article[]>([]);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    setLoading(true);
+    fetch(url)
+      .then((res) => res.json())
+      .then((result) => {
+        const data: Article[] = [...articles, ...result.data];
+
+        // 去除重复id文章
+        const uniqArticles = data.filter((item, index) => {
+          return data.findIndex((i) => i.aid === item.aid) === index;
+        });
+
+        setArticles(uniqArticles);
+        setLoading(false);
+        setInit(false);
+        setUrl(url + page);
+      });
+  }, [page]);
+
+  return [loading, init, articles];
+};
+
+function App() {
+  const [page, setPage] = useState(2);
+  const [loading, init, articles] = useArticle(page);
 
   return (
     <div className="App">
@@ -45,13 +59,22 @@ function App() {
 
       {
         <ul>
-          {list.map((item) => {
-            return (
-              <li key={item.aid}>
-                <a href={`${API_URL}wap/view/${item.aid}.htm`}>{item.text}</a>
-              </li>
-            );
-          })}
+          <InfiniteScroll
+            dataLength={articles.length}
+            next={() => {
+              !init && setPage(page + 1);
+            }}
+            hasMore={true}
+            loader={null}
+          >
+            {articles.map((item) => {
+              return (
+                <li key={item.aid}>
+                  <a href={`${API_URL}wap/view/${item.aid}.htm`}>{item.text}</a>
+                </li>
+              );
+            })}
+          </InfiniteScroll>
         </ul>
       }
     </div>
