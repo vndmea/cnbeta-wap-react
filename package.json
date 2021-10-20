@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "serve": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build --base=/cnbeta-wap",
     "preview": "vite preview"
   },
   "dependencies": {
