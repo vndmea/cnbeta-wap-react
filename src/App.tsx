@@ -70,7 +70,12 @@ function App() {
             {articles.map((item) => {
               return (
                 <li key={item.aid}>
-                  <a href={`${API_URL}wap/view/${item.aid}.htm`}>{item.text}</a>
+                  <a
+                    href={`${API_URL}wap/view/${item.aid}.htm`}
+                    target="_blank"
+                  >
+                    {item.text}
+                  </a>
                 </li>
               );
             })}
